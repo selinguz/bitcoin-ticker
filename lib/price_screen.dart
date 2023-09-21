@@ -1,4 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+import 'coin_data.dart';
 
 class PriceScreen extends StatefulWidget {
   const PriceScreen({super.key});
@@ -9,6 +12,37 @@ class PriceScreen extends StatefulWidget {
 
 class _PriceScreenState extends State<PriceScreen> {
   String selectedCurrency = 'USD';
+
+  DropdownButton<String> getDropDownButton() {
+    List<DropdownMenuItem<String>> dropDownMenuItems = [];
+
+    for (String currency in currenciesList) {
+      var newItem = DropdownMenuItem(
+        child: Text(currency),
+        value: currency,
+      );
+      dropDownMenuItems.add(newItem);
+    }
+
+    return DropdownButton<String>(
+      value: selectedCurrency,
+      items: dropDownMenuItems,
+      onChanged: (value) {
+        setState(() {
+          selectedCurrency = value!;
+        });
+      },
+    );
+  }
+
+  List<Text> getCupertionPickerItems() {
+    List<Text> pickerItems = [];
+
+    for (String currency in currenciesList) {
+      pickerItems.add(Text(currency));
+    }
+    return pickerItems;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,27 +80,12 @@ class _PriceScreenState extends State<PriceScreen> {
             alignment: Alignment.center,
             padding: const EdgeInsets.only(bottom: 30.0),
             color: Colors.lightBlue,
-            child: DropdownButton<String>(
-              value: selectedCurrency,
-              items: const [
-                DropdownMenuItem(
-                  value: 'USD',
-                  child: Text('USD'),
-                ),
-                DropdownMenuItem(
-                  value: 'EUR',
-                  child: Text('EUR'),
-                ),
-                DropdownMenuItem(
-                  value: 'GBP',
-                  child: Text('GBP'),
-                ),
-              ],
-              onChanged: (value) {
-                setState(() {
-                  selectedCurrency = value!;
-                });
+            child: CupertinoPicker(
+              itemExtent: 48.0,
+              onSelectedItemChanged: (selectedIndex) {
+                print(selectedIndex);
               },
+              children: getCupertionPickerItems(),
             ),
           ),
         ],
@@ -74,3 +93,5 @@ class _PriceScreenState extends State<PriceScreen> {
     );
   }
 }
+
+
