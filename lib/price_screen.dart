@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'dart:io' show Platform; //tüm kütüphaneyi indirmek yerine yalnızca
+// bir başlığını indirmeyi sağlar.
 import 'coin_data.dart';
 
 class PriceScreen extends StatefulWidget {
@@ -13,13 +14,13 @@ class PriceScreen extends StatefulWidget {
 class _PriceScreenState extends State<PriceScreen> {
   String selectedCurrency = 'USD';
 
-  DropdownButton<String> getDropDownButton() {
+  DropdownButton<String> androidDropDownButton() {
     List<DropdownMenuItem<String>> dropDownMenuItems = [];
 
     for (String currency in currenciesList) {
       var newItem = DropdownMenuItem(
-        child: Text(currency),
         value: currency,
+        child: Text(currency),
       );
       dropDownMenuItems.add(newItem);
     }
@@ -35,13 +36,19 @@ class _PriceScreenState extends State<PriceScreen> {
     );
   }
 
-  List<Text> getCupertionPickerItems() {
+  CupertinoPicker IOSpicker(){
     List<Text> pickerItems = [];
 
     for (String currency in currenciesList) {
       pickerItems.add(Text(currency));
     }
-    return pickerItems;
+
+    return CupertinoPicker(
+      itemExtent: 48.0,
+      onSelectedItemChanged: (selectedIndex) {
+      },
+      children: pickerItems,
+    );
   }
 
   @override
@@ -80,13 +87,7 @@ class _PriceScreenState extends State<PriceScreen> {
             alignment: Alignment.center,
             padding: const EdgeInsets.only(bottom: 30.0),
             color: Colors.lightBlue,
-            child: CupertinoPicker(
-              itemExtent: 48.0,
-              onSelectedItemChanged: (selectedIndex) {
-                print(selectedIndex);
-              },
-              children: getCupertionPickerItems(),
-            ),
+            child: Platform.isIOS ? IOSpicker() : androidDropDownButton(),
           ),
         ],
       ),
